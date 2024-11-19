@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}AASTU Geology Student Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="text-white mb-4"><i class="fas fa-user-graduate"></i> Geology Student Dashboard</h2>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h3><i class="fas fa-book-reader"></i> Geological Learning Materials</h3>
+            </div>
+            <div class="card-body">
+                {% if materials %}
+                    <ul class="list-group">
+                    {% for material in materials %}
+                        <li class="list-group-item">
+                            <h5><i class="fas fa-file-alt"></i> {{ material.name }}</h5>
+                            <p class="text-muted">{{ material.description }}</p>
+                            <a href="{{ url_for('static', filename='uploads/' + material.filename) }}" 
+                               class="btn btn-sm btn-primary" target="_blank">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted"><i class="fas fa-info-circle"></i> No geological materials available yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h3><i class="fas fa-newspaper"></i> Geological News & Announcements</h3>
+            </div>
+            <div class="card-body">
+                {% if news %}
+                    <ul class="list-group">
+                    {% for item in news %}
+                        <li class="list-group-item">
+                            <h5><i class="fas fa-bullhorn"></i> {{ item.title }}</h5>
+                            <p>{{ item.content }}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-clock"></i> Posted on: {{ item.date }}
+                            </small>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted"><i class="fas fa-info-circle"></i> No geological news available yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

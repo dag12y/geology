@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Geology Users{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">
+        <i class="fas fa-users-cog"></i> Manage Geology Users
+    </h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3><i class="fas fa-list"></i> User List</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th><i class="fas fa-user"></i> Username</th>
+                                    <th><i class="fas fa-user-tag"></i> Name</th>
+                                    <th><i class="fas fa-user-shield"></i> Type</th>
+                                    <th><i class="fas fa-cogs"></i> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for username, user in users.items() %}
+                                <tr>
+                                    <td>{{ username }}</td>
+                                    <td>{{ user.name }}</td>
+                                    <td>
+                                        <span class="badge {% if user.type == 'teacher' %}bg-primary{% else %}bg-success{% endif %}">
+                                            {{ user.type|title }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#changePasswordModal"
+                                                data-username="{{ username }}">
+                                            <i class="fas fa-key"></i> Change Password
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-key"></i> Change Password
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('change_password') }}" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="email" id="userEmail">
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">
+                            <i class="fas fa-lock"></i> New Password
+                        </label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Change Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('changePasswordModal').addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var username = button.getAttribute('data-username');
+    document.getElementById('userEmail').value = username;
+});
+</script>
+{% endblock %} 
